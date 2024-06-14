@@ -1,20 +1,14 @@
 import matplotlib.pyplot as plt; plt.ion()
+import matplotlib; 
 import numpy as np
 
-import ifs
-from importlib import reload; reload(ifs)
+import grow_fractal as pf
+from importlib import reload; reload(pf)
 
-fig, ax = plt.subplots(figsize=(6, 6))
+node = pf.Node()
 
-# Draw fractal
-n_points = 20000
+for i in range(100):
+    node.grow()
+    
 
-x = np.zeros((2, n_points))
-
-fractal = ifs.BarnsleyFern()
-
-for i in range(0, n_points):
-    x[:, i] = fractal.get_next_point()
-
-ax.scatter(x[0, :], x[1, :], s=0.2, color="black")
 
