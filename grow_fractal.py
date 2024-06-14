@@ -9,14 +9,14 @@ class Node:
     def grow(self):
         self.size = self.size + 1
         
-        if self.new_child():
+        if self._new_child():
             self.children.append(Node())
         else:
-            child = self.select_child()       
+            child = self._select_child()       
              
             child.grow()
             
-    def new_child(self):
+    def _new_child(self):
         if not self.children:
             return True
         
@@ -25,12 +25,27 @@ class Node:
         
         return False
     
-    def select_child(self):
+    def _select_child(self):
         i = np.random.choice(len(self.children))
         
         return self.children[i]
     
-    def draw(x, 
+    def draw(self, axes, x0, M):
+        # Draw self
+        d = M @ np.array([[0], [self.size]])
+        x1 = x0 + d
+        
+        tmp = np.hstack((x0, x1))
+        axes.plot(tmp[0, :], tmp[1, :], linewidth=1)
+        
+        # Delegate to children
+        angles = np.linspace(-np.pi/4, np.pi/4, len(self.children))
+        for (i, child) in enumerate(self.children):
+            angle = angles[i]
+            R = np.array([[np.cos(angle), -np.sin(angle)], [np.sin(angle), np.cos(angle)]])
+            
+            child.draw(axes, x1, R)
+        
     
             
         
